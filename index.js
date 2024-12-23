@@ -1,6 +1,5 @@
 // const { Sequelize, Association, Model } = require('sequelize');
 const { Sequelize, DataTypes, Model } = require('sequelize');
-// const { DataTypes } = require('sequelize');
 
 // Set up a Sequelize instance
 const sequelize = new Sequelize('postgres','postgres','bennett12345', {
@@ -19,10 +18,6 @@ const sequelize = new Sequelize('postgres','postgres','bennett12345', {
   }
 })();
 
-// sequelize.sync();
-
-
-// const sequelize = new Sequelize('sqlite::memory:');
 
 sequelize.sync();
 
