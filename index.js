@@ -21,72 +21,86 @@ const sequelize = new Sequelize('postgres','postgres','bennett12345', {
 
 sequelize.sync();
 
+
 // Product Model
-class Product extends Model {}
-Product.init(
-  {
-    name: DataTypes.STRING,
-  },
-  { sequelize, modelName: 'product' }
-);
-
-// Tag Model
-class Tag extends Model {}
-Tag.init(
-  {
-    name: DataTypes.STRING,
-  },
-  { sequelize, modelName: 'tag' }
-);
-
-// Many-to-Many Relationship
-Product.belongsToMany(Tag, { through: 'ProductTags' });
-Tag.belongsToMany(Product, { through: 'ProductTags' });
-
-(async () => {
-  const phone = await Product.create({ name: 'Smartphone' });
-  const laptop = await Product.create({ name: 'Laptop' });
-
-  const electronics = await Tag.create({ name: 'Electronics' });
-  const gadgets = await Tag.create({ name: 'Gadgets' });
-
-  // Associate tags with products
-  await phone.addTag(electronics);
-  await phone.addTag(gadgets);
-
-  await laptop.addTag(electronics);
-})();
-const fin = Product.findAll({ include: Tag }).then((fin)=>console.log(fin))
-
-
-// // Association
 // class Product extends Model {}
 // Product.init(
 //   {
-//     title: Sequelize.STRING,
+//     name: DataTypes.STRING,
 //   },
-//   { sequelize, modelName: 'product' },
+//   { sequelize, modelName: 'product' }
 // );
-// class User extends Model {}
-// User.init(
+
+// // Tag Model
+// class Tag extends Model {}
+// Tag.init(
 //   {
-//     firstName: Sequelize.STRING,
-//     lastName: Sequelize.STRING,
+//     name: DataTypes.STRING,
 //   },
-//   { sequelize, modelName: 'user' },
+//   { sequelize, modelName: 'tag' }
 // );
-// class Address extends Model {}
-// Address.init(
-//   {
-//     type: DataTypes.STRING,
-//     line1: Sequelize.STRING,
-//     line2: Sequelize.STRING,
-//     city: Sequelize.STRING,
-//     state: Sequelize.STRING,
-//     zip: Sequelize.STRING,
-//   },
-//   { sequelize, modelName: 'address' },
-// );
+
+// // Many-to-Many Relationship
+// Product.belongsToMany(Tag, { through: 'ProductTags' });
+// Tag.belongsToMany(Product, { through: 'ProductTags' });
+
+// (async () => {
+//   const phone = await Product.create({ name: 'Smartphone' });
+//   const laptop = await Product.create({ name: 'Laptop' });
+
+//   const electronics = await Tag.create({ name: 'Electronics' });
+//   const gadgets = await Tag.create({ name: 'Gadgets' });
+//   Tag.bulkCreate([
+//     { name: 'The Martians' },
+//     { name: 'The Earthlings' },
+//     { name: 'The Plutonians' },
+//   ]);
+
+//   // Associate tags with products
+//   await phone.addTag(electronics);
+//   await phone.addTag(gadgets);
+
+//   await laptop.addTag(electronics);
+// })();
+// const fin = Product.findAll({ include: Tag }).then((res)=>console.log(res))
+
+
+// // Association
+class Product extends Model {}
+Product.init(
+  {
+    title: Sequelize.STRING,
+  },
+  { sequelize, modelName: 'product' },
+);
+class User extends Model {
+  getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+}
+User.init(
+  {
+    firstName: Sequelize.STRING,
+    lastName: Sequelize.STRING,
+  },
+  { sequelize, modelName: 'user' },
+);
+
+const user = User.findByPk(1);
+console.log(user.getFullName());
+
+class Address extends Model {}
+Address.init(
+  {
+    type: DataTypes.STRING,
+    line1: Sequelize.STRING,
+    line2: Sequelize.STRING,
+    city: Sequelize.STRING,
+    state: Sequelize.STRING,
+    zip: Sequelize.STRING,
+  },
+  { sequelize, modelName: 'address' },
+);
 
 // // We save the return values of the association setup calls to use them later
 // Product.User = Product.belongsTo(User);
@@ -267,14 +281,17 @@ const fin = Product.findAll({ include: Tag }).then((fin)=>console.log(fin))
 //     console.log(user.job); // This will certainly be 'Technical Lead JavaScript'
 //   }
 
-// const User1 = sequelize.define('user1', { 
+// const User1 = sequelize.define('user1', {
 //   name: DataTypes.STRING,
 //   age: { type: DataTypes.STRING, required: true },
 //  }, { timestamps: false });
 // const jane = User1.create({ name: 'Jane', age: 100 });
-// jane.increment({
-//   age: 2,
-// });
+// // jane.increment({
+// //   age: 2,
+// // });
+// User1.increment( 'age', { by: 5, where: { id: 1 } })
+
+
 // jane.increment(['age', 'cash'], { by: 2 });
 // jane.name = 'Ada';
 // jane.reload();
